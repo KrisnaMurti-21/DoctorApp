@@ -8,9 +8,10 @@
     "lint": "eslint .",
     "start": "react-native start",
     "test": "jest",
-    "emulator-android": "C:/Users/NXAU2/AppData/Local/Android/Sdk/emulator/emulator -avd Pixel_7_Pro_API_34"
+    "emulator-android": "%USERPROFILE%/AppData/Local/Android/Sdk/emulator/emulator -avd Pixel_7_Pro_API_34"
   },
   "dependencies": {
+    "@react-navigation/bottom-tabs": "^6.5.20",
     "@react-navigation/native": "^6.1.16",
     "@react-navigation/native-stack": "^6.9.25",
     "react": "18.2.0",
