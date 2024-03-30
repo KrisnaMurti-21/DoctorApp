@@ -30,6 +30,7 @@ export default Register;
 const styles = StyleSheet.create({
   page: {
     backgroundColor: colors.white,
+    flex: 1,
   },
   content: {
     padding: 40,
