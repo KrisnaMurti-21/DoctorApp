@@ -1,10 +1,18 @@
 import React, {useState} from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
 import {Button, Gap, Header, Input, Loading} from '../../components';
-import {colors, useForm} from '../../utils';
+import {
+  colors,
+  getData,
+  getFirebaseErrorMessage,
+  storeData,
+  useForm,
+} from '../../utils';
 import {Fire} from '../../config';
 import {getAuth, createUserWithEmailAndPassword} from 'firebase/auth';
 import {showMessage, hideMessage} from 'react-native-flash-message';
+import {getDatabase, ref, set} from 'firebase/database';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Register = ({navigation}) => {
   const [form, setForm] = useForm({
@@ -20,15 +28,26 @@ const Register = ({navigation}) => {
     console.log(form);
     setLoading(true);
     const auth = getAuth(Fire);
+    const db = getDatabase(Fire);
+
     createUserWithEmailAndPassword(auth, form.email, form.password)
       .then(success => {
         setLoading(false);
         setForm('reset');
+        const data = {
+          fullName: form.fullName,
+          profession: form.profession,
+          email: form.email,
+        };
+        set(ref(db, 'users/' + success.user.uid + '/'), data);
+        storeData('users', form);
+
+        navigation.navigate('UploadPhoto');
         console.log(success);
       })
       .catch(error => {
         setLoading(false);
-        const errorMessage = error.code;
+        const errorMessage = getFirebaseErrorMessage(error.code);
         showMessage({
           message: errorMessage,
           type: 'default',
@@ -37,7 +56,6 @@ const Register = ({navigation}) => {
         });
         console.log(error);
       });
-    // navigation.navigate('UploadPhoto')
   };
   return (
     <>
