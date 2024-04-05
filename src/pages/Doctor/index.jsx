@@ -1,5 +1,5 @@
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   DoctorCategory,
   Gap,
@@ -7,7 +7,7 @@ import {
   NewsItem,
   RatedDoctor,
 } from '../../components';
-import {colors, fonts} from '../../utils';
+import {colors, fonts, getData} from '../../utils';
 import {
   DummyDoctor1,
   DummyDoctor2,
@@ -16,6 +16,11 @@ import {
 } from '../../assets';
 
 const Doctor = ({navigation}) => {
+  useEffect(() => {
+    getData('users').then(res => {
+      console.log('data user :', res);
+    });
+  }, []);
   return (
     <View style={styles.page}>
       <View style={styles.content}>

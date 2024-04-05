@@ -38,11 +38,12 @@ const Register = ({navigation}) => {
           fullName: form.fullName,
           profession: form.profession,
           email: form.email,
+          uid: success.user.uid,
         };
         set(ref(db, 'users/' + success.user.uid + '/'), data);
-        storeData('users', form);
+        storeData('user', data);
 
-        navigation.navigate('UploadPhoto');
+        navigation.navigate('UploadPhoto', data);
         console.log(success);
       })
       .catch(error => {
