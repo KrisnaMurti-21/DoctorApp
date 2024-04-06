@@ -14,10 +14,12 @@ import {
   DummyDoctor3,
   JSONCategoryDoctor,
 } from '../../assets';
+import {getAuth, onAuthStateChanged} from 'firebase/auth';
+import {Fire} from '../../config';
 
 const Doctor = ({navigation}) => {
   useEffect(() => {
-    getData('users').then(res => {
+    getData('user').then(res => {
       console.log('data user :', res);
     });
   }, []);
