@@ -1,28 +1,27 @@
 import {Alert, StyleSheet, Text, View} from 'react-native';
 import React, {useEffect} from 'react';
 import {ILLogo} from '../../assets';
-import {colors, fonts, getData} from '../../utils';
-import {getAuth, onAuthStateChanged} from 'firebase/auth';
-import {Fire} from '../../config';
+import {colors, fonts} from '../../utils';
+import {auth} from '../../config/Fire';
+import {onAuthStateChanged} from 'firebase/auth';
 
 const Splash = ({navigation}) => {
   useEffect(() => {
-    setTimeout(() => {
-      const auth = getAuth(Fire);
-      onAuthStateChanged(auth, user => {
+    const unsubscribe = onAuthStateChanged(auth, user => {
+      setTimeout(() => {
         if (user) {
           // User is signed in, see docs for a list of available properties
           // https://firebase.google.com/docs/reference/js/auth.user
-          console.log("ini hasil dari splash:",user);
+          console.log('ini hasil dari splash:', user);
           navigation.replace('MainApp');
         } else {
           // User is signed out
           Alert.alert('Silahkan Login Terlebih Dahulu');
           navigation.replace('GetStarted');
         }
-      });
-      // navigation.replace('GetStarted');
-    }, 3000);
+      }, 3000);
+    });
+    return unsubscribe; // Ini untuk cleanup subscription saat komponen di-unmount
   }, [navigation]);
   return (
     <View style={styles.page}>
