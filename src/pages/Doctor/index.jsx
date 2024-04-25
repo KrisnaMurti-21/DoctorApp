@@ -1,5 +1,11 @@
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import React, {useEffect} from 'react';
+import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import {
+  DummyDoctor1,
+  DummyDoctor2,
+  DummyDoctor3,
+  JSONCategoryDoctor,
+} from '../../assets';
 import {
   DoctorCategory,
   Gap,
@@ -8,14 +14,6 @@ import {
   RatedDoctor,
 } from '../../components';
 import {colors, fonts, getData} from '../../utils';
-import {
-  DummyDoctor1,
-  DummyDoctor2,
-  DummyDoctor3,
-  JSONCategoryDoctor,
-} from '../../assets';
-import {getAuth, onAuthStateChanged} from 'firebase/auth';
-import {Fire} from '../../config';
 
 const Doctor = ({navigation}) => {
   useEffect(() => {

@@ -24,7 +24,7 @@ const Login = ({navigation}) => {
     signInWithEmailAndPassword(auth, form.email, form.password)
       .then(success => {
         setLoading(false);
-        console.log('berhasil masuk : ', success);
+        console.log('berhasil masuk : ', success.user);
         // contoh penggunaan child dimana child untuk membungkuskan ref db
         get(child(ref(db), `users/${success.user.uid}/`))
           .then(snapshot => {

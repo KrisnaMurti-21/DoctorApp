@@ -16,7 +16,6 @@ const Splash = ({navigation}) => {
           navigation.replace('MainApp');
         } else {
           // User is signed out
-          Alert.alert('Silahkan Login Terlebih Dahulu');
           navigation.replace('GetStarted');
         }
       }, 3000);

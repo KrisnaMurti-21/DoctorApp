@@ -7,6 +7,7 @@ import {Fire} from '../../config';
 import {showMessage} from 'react-native-flash-message';
 import {ILNullPhoto} from '../../assets';
 import {launchImageLibrary} from 'react-native-image-picker';
+import {getAuth, signOut, updatePassword} from 'firebase/auth';
 
 const UpdateProfile = ({navigation}) => {
   const [profile, setProfile] = useState({
@@ -26,11 +27,52 @@ const UpdateProfile = ({navigation}) => {
   }, []);
 
   const onUpdate = () => {
+    // const auth = getAuth(Fire);
+    // signOut(auth).then(() => {
+    //   // Sign-out successful.
+    //   console.log('sign out success');
+    //   navigation.replace('GetStarted');
+    // }).catch((error) => {
+    //   // An error happened.
+    // });
+    if (password.length > 0) {
+      if (password.length < 6) {
+        showMessage({
+          message: 'Password minimal 6 karakter',
+          type: 'default',
+          backgroundColor: colors.error,
+          color: colors.white,
+        });
+      } else {
+        updatePasswordData();
+        updateProfileData();
+        navigation.replace('MainApp');
+      }
+    } else {
+      updateProfileData();
+      navigation.replace('MainApp');
+    }
+  };
+
+  const updatePasswordData = () => {
+    const auth = getAuth(Fire);
+    const user = auth.currentUser;
+    updatePassword(user, password)
+      .then(() => {
+        // Update successful.
+        console.log('password updated');
+      })
+      .catch(error => {
+        // An error ocurred
+        console.log(error);
+      });
+  };
+
+  const updateProfileData = () => {
     const db = getDatabase(Fire);
+
     const data = profile;
     data.photo = photoForDB;
-    console.log('data :', profile);
-
     update(ref(db, `users/${profile.uid}`), data)
       .then(() => {
         console.log('data updated');
@@ -54,6 +96,7 @@ const UpdateProfile = ({navigation}) => {
   };
 
   const getImage = () => {
+    // console.log('get image');
     launchImageLibrary(
       {
         includeBase64: true,
@@ -101,7 +144,12 @@ const UpdateProfile = ({navigation}) => {
           <Gap height={24} />
           <Input label="Email" value={profile.email} disable />
           <Gap height={24} />
-          <Input label="Password" value={password} />
+          <Input
+            label="Password"
+            value={password}
+            secureTextEntry
+            onChangeText={value => setPassword(value)}
+          />
           <Gap height={40} />
           <Button
             title="Save Profile"

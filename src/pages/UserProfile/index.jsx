@@ -3,6 +3,9 @@ import React, {useEffect, useState} from 'react';
 import {Gap, Header, List, Profile} from '../../components';
 import { getData } from '../../utils';
 import { ILNullPhoto } from '../../assets';
+import { getAuth, signOut } from 'firebase/auth';
+import { showMessage } from 'react-native-flash-message';
+import { Fire } from '../../config';
 
 const UserProfile = ({navigation}) => {
   const [profile, setProfile] = useState({
@@ -17,6 +20,23 @@ const UserProfile = ({navigation}) => {
       setProfile(data);
     });
   }, []);
+
+  const signOutProfile = () => {
+    const auth = getAuth(Fire);
+    signOut(auth).then(() => {
+      // Sign-out successful.
+      console.log('sign out success');
+      navigation.replace('GetStarted');
+    }).catch((error) => {
+      // An error happened.
+      showMessage({
+        message: error.message,
+        type: 'default',
+        backgroundColor: colors.error,
+        color: colors.white,
+      })
+    });
+  }
   return (
     <View style={styles.page}>
       <Header title="Profile" onPress={() => navigation.goBack()} />
@@ -45,10 +65,11 @@ const UserProfile = ({navigation}) => {
         icon={'rate'}
       />
       <List
-        name={'Help Center'}
-        desc={'Last Update Yesterday'}
+        name={'Sign Out'}
+        desc={'Tombol Sign Out'}
         type={'next'}
         icon={'help'}
+        onPress={signOutProfile}
       />
     </View>
   );
