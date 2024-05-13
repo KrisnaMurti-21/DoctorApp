@@ -2,7 +2,6 @@ import {configureStore} from '@reduxjs/toolkit';
 
 const initialState = {
   loading: false,
-  name: 'krisna murti',
 };
 
 const reducer = (state = initialState, action) => {
@@ -10,9 +9,9 @@ const reducer = (state = initialState, action) => {
     return {
       ...state,
       loading: action.value,
-    }
+    };
   }
-    return state;
+  return state;
 };
 
 const store = configureStore({

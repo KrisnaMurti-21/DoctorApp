@@ -1,11 +1,6 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
-import {
-  DummyDoctor1,
-  DummyDoctor2,
-  DummyDoctor3,
-  JSONCategoryDoctor,
-} from '../../assets';
+import {DummyDoctor1, DummyDoctor2, DummyDoctor3} from '../../assets';
 import {
   DoctorCategory,
   Gap,
@@ -14,11 +9,103 @@ import {
   RatedDoctor,
 } from '../../components';
 import {colors, fonts, getData} from '../../utils';
+import {
+  child,
+  get,
+  getDatabase,
+  limitToFirst,
+  limitToLast,
+  onValue,
+  orderByChild,
+  query,
+  ref,
+} from 'firebase/database';
+import {Fire} from '../../config';
 
 const Doctor = ({navigation}) => {
+  const [news, setNews] = useState([]);
+  const [categoryDoctor, setCategoryDoctor] = useState([]);
+  const [doctors, setDoctors] = useState([]);
+  const dbRef = ref(getDatabase(Fire));
   useEffect(() => {
-    getData('user');
+    getCategoryDoctor();
+    getTopRatedDoctor();
+    getNews();
   }, []);
+
+  const parseArray = listObject => {
+    const data = [];
+    Object.keys(listObject).map(key => {
+      data.push({
+        id: key,
+        data: listObject[key],
+      });
+    });
+    return data;
+  };
+
+  const getTopRatedDoctor = () => {
+    //memanggil top rated doctor
+    const rateCount = query(
+      child(dbRef, `doctors`),
+      orderByChild('rate'),
+      limitToLast(3),
+    );
+    // Jika menggunakan "onValue"
+    // onValue(rateCount, snapshot => {
+    //   if (snapshot.exists()) {
+    //     console.log(snapshot.val());
+    //     // setTopRatedDoctor(snapshot.val());
+    //   } else {
+    //     console.log('No data available');
+    //   }
+    // })
+    get(rateCount)
+      .then(snapshot => {
+        if (snapshot.exists()) {
+          const data = parseArray(snapshot.val());
+          console.log('data parse:', data);
+          setDoctors(data);
+          // console.log(snapshot.val());
+          // setTopRatedDoctor(snapshot.val());
+        } else {
+          console.log('No data available');
+        }
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  };
+  const getNews = () => {
+    //memanggil news
+    get(child(dbRef, `news`))
+      .then(snapshot => {
+        if (snapshot.exists()) {
+          setNews(snapshot.val());
+        } else {
+          console.log('No data available');
+        }
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  };
+
+  const getCategoryDoctor = () => {
+    //memanggil category dokter
+    get(child(dbRef, `category_doctor`))
+      .then(snapshot => {
+        if (snapshot.exists()) {
+          setCategoryDoctor(snapshot.val());
+        } else {
+          console.log('No data available');
+        }
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  };
+
   return (
     <View style={styles.page}>
       <View style={styles.content}>
@@ -34,7 +121,7 @@ const Doctor = ({navigation}) => {
             <ScrollView horizontal showsHorizontalScrollIndicator={false}>
               <View style={styles.category}>
                 <Gap width={32} />
-                {JSONCategoryDoctor.data.map(item => {
+                {categoryDoctor.map(item => {
                   return (
                     <DoctorCategory
                       key={item.id}
@@ -49,27 +136,23 @@ const Doctor = ({navigation}) => {
           </View>
           <View style={styles.wrapperSection}>
             <Text style={styles.sectionLabel}>Top Rated Doctors</Text>
-            <RatedDoctor
-              name={'Alexa Rachel'}
-              desc={'Pediatrician'}
-              avatar={DummyDoctor1}
-              onPress={() => navigation.navigate('DoctorProfile')}
-            />
-            <RatedDoctor
-              name={'Sunny Frank'}
-              desc={'Dentist'}
-              avatar={DummyDoctor2}
-            />
-            <RatedDoctor
-              name={'Poe Minn'}
-              desc={'Podiatrist'}
-              avatar={DummyDoctor3}
-            />
+            {doctors.map(item => {
+              return (
+                <RatedDoctor
+                  key={item.id}
+                  name={item.data.fullName}
+                  desc={item.data.profession}
+                  avatar={{uri: item.data.photo}}
+                  onPress={() => navigation.navigate('DoctorProfile')}
+                />
+              );
+            })}
+
             <Text style={styles.sectionLabel}>Good News</Text>
           </View>
-          <NewsItem />
-          <NewsItem />
-          <NewsItem />
+          {news.map(item => {
+            return <NewsItem key={item.id} {...item} />;
+          })}
           <Gap height={30} />
         </ScrollView>
       </View>

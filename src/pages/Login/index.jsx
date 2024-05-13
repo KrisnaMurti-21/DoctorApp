@@ -7,7 +7,7 @@ import {useDispatch} from 'react-redux';
 import {ILLogo} from '../../assets';
 import {Button, Gap, Input, Link} from '../../components';
 import {Fire} from '../../config';
-import {colors, fonts, storeData, useForm} from '../../utils';
+import {colors, fonts, showError, storeData, useForm} from '../../utils';
 
 const Login = ({navigation}) => {
   const [form, setForm] = useForm({
@@ -17,7 +17,6 @@ const Login = ({navigation}) => {
   const dispatch = useDispatch();
 
   const Login = () => {
-    console.log(form);
     dispatch({type: 'SET_LOADING', value: true});
     setForm('reset');
     const auth = getAuth(Fire);
@@ -25,31 +24,23 @@ const Login = ({navigation}) => {
     signInWithEmailAndPassword(auth, form.email, form.password)
       .then(success => {
         dispatch({type: 'SET_LOADING', value: false});
-        console.log('berhasil masuk : ', success.user);
         // contoh penggunaan child dimana child untuk membungkuskan ref db
         get(child(ref(db), `users/${success.user.uid}/`))
           .then(snapshot => {
             if (snapshot.exists()) {
-              console.log(snapshot.val());
               storeData('user', snapshot.val());
               navigation.replace('Splash');
             } else {
-              console.log('No data available');
+              showError('No data available');
             }
           })
           .catch(err => {
-            console.log('error db : ', err);
+            showError('No data available');
           });
       })
       .catch(error => {
-        console.log('error login : ', error);
         dispatch({type: 'SET_LOADING', value: false});
-        showMessage({
-          message: error.message,
-          type: 'default',
-          backgroundColor: colors.error,
-          color: colors.white,
-        });
+        showError(error.message);
       });
   };
 

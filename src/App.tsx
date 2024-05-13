@@ -9,7 +9,6 @@ import {Loading} from './components';
 const MainApp = () => {
   const [loading, setLoading] = useState(false);
   const stateLoading = useSelector(state => state.loading);
-  console.log('state global : ', stateLoading);
   return (
     <Provider store={store}>
       <NavigationContainer>
