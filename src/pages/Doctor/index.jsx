@@ -80,7 +80,9 @@ const Doctor = ({navigation}) => {
     get(child(dbRef, `news`))
       .then(snapshot => {
         if (snapshot.exists()) {
-          setNews(snapshot.val());
+          const data = snapshot.val();
+          const filterData = data.filter(item => item !== null);
+          setNews(filterData);
         } else {
           console.log('No data available');
         }
@@ -95,7 +97,11 @@ const Doctor = ({navigation}) => {
     get(child(dbRef, `category_doctor`))
       .then(snapshot => {
         if (snapshot.exists()) {
-          setCategoryDoctor(snapshot.val());
+          console.log("category:", snapshot.val());
+          // menghilangkan empty pada awal array setelah di get data
+          const data = snapshot.val();
+          const filterData = data.filter(item => item !== null);
+          setCategoryDoctor(filterData);
         } else {
           console.log('No data available');
         }
@@ -125,7 +131,7 @@ const Doctor = ({navigation}) => {
                     <DoctorCategory
                       key={item.id}
                       category={item.category}
-                      onPress={() => navigation.navigate('ChooseDoctor')}
+                      onPress={() => navigation.navigate('ChooseDoctor', item)}
                     />
                   );
                 })}
@@ -142,7 +148,7 @@ const Doctor = ({navigation}) => {
                   name={item.data.fullName}
                   desc={item.data.profession}
                   avatar={{uri: item.data.photo}}
-                  onPress={() => navigation.navigate('DoctorProfile')}
+                  onPress={() => navigation.navigate('DoctorProfile', item)}
                 />
               );
             })}
