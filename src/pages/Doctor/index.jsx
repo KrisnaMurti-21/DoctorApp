@@ -63,7 +63,6 @@ const Doctor = ({navigation}) => {
       .then(snapshot => {
         if (snapshot.exists()) {
           const data = parseArray(snapshot.val());
-          console.log('data parse:', data);
           setDoctors(data);
           // console.log(snapshot.val());
           // setTopRatedDoctor(snapshot.val());
@@ -97,7 +96,6 @@ const Doctor = ({navigation}) => {
     get(child(dbRef, `category_doctor`))
       .then(snapshot => {
         if (snapshot.exists()) {
-          console.log("category:", snapshot.val());
           // menghilangkan empty pada awal array setelah di get data
           const data = snapshot.val();
           const filterData = data.filter(item => item !== null);

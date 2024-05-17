@@ -20,7 +20,6 @@ const ChooseDoctor = ({navigation, route}) => {
   const dbRef = ref(getDatabase(Fire));
   useEffect(() => {
     const datacategory = itemCategory.category;
-    console.log(datacategory);
     callDoctorByCategory(itemCategory.category);
   }, []);
   const callDoctorByCategory = category => {
@@ -41,7 +40,6 @@ const ChooseDoctor = ({navigation, route}) => {
             });
           });
           setListDoctor(data);
-          console.log(data);
         } else {
           console.log('No data available');
         }
