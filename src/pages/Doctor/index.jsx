@@ -116,26 +116,6 @@ const Doctor = ({navigation}) => {
           <View style={styles.wrapperSection}>
             <Gap height={30} />
             <HomeProfile onPress={() => navigation.navigate('UserProfile')} />
-            <Text style={styles.welcome}>
-              Mau Konsultasi dengan siapa hari ini?
-            </Text>
-          </View>
-          <View style={styles.wrapperScroll}>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-              <View style={styles.category}>
-                <Gap width={32} />
-                {categoryDoctor.map(item => {
-                  return (
-                    <DoctorCategory
-                      key={item.id}
-                      category={item.category}
-                      onPress={() => navigation.navigate('ChooseDoctor', item)}
-                    />
-                  );
-                })}
-                <Gap width={22} />
-              </View>
-            </ScrollView>
           </View>
           <View style={styles.wrapperSection}>
             <Text style={styles.sectionLabel}>Top Rated Doctors</Text>
@@ -146,7 +126,7 @@ const Doctor = ({navigation}) => {
                   name={item.data.fullName}
                   desc={item.data.profession}
                   avatar={{uri: item.data.photo}}
-                  onPress={() => navigation.navigate('DoctorProfile', item)}
+                  // onPress={() => navigation.navigate('DoctorProfile', item)}
                 />
               );
             })}

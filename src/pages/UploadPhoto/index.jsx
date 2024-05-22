@@ -42,7 +42,7 @@ const UploadPhoto = ({navigation, route}) => {
 
   db = getDatabase(Fire);
   const uploadandContinue = () => {
-    update(ref(db, 'users/' + uid + '/'), {photo: photoForDB});
+    update(ref(db, 'doctors/' + uid + '/'), {photo: photoForDB});
     const data = route.params;
     data.photo = photoForDB;
     storeData('user', data);

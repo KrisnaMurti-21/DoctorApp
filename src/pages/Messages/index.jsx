@@ -8,26 +8,6 @@ import {Fire} from '../../config';
 
 const Messages = ({navigation}) => {
   const [user, setUser] = useState({});
-  const [doctors, setDoctors] = useState([
-    {
-      id: 1,
-      profile: DummyDoctor4,
-      name: 'Alexander Jannie',
-      desc: 'Baik Ibu, terima kasih banyak atas wakt...',
-    },
-    {
-      id: 2,
-      profile: DummyDoctor5,
-      name: 'Nairobi Putri Hayza',
-      desc: 'Oh tentu saja tidak, karena jeruk itu...',
-    },
-    {
-      id: 3,
-      profile: DummyDoctor6,
-      name: 'John McParker Steve',
-      desc: 'Baik, Menurut pak dokter apa yang haru...',
-    },
-  ]);
   const [historyChat, setHistoryChat] = useState([]);
 
   const db = ref(getDatabase(Fire));
@@ -40,8 +20,9 @@ const Messages = ({navigation}) => {
         const oldData = snapshot.val();
         const data = [];
         const promises = await Object.keys(oldData).map(async key => {
-          const urlUidDoctor = `doctors/${oldData[key].uidPartner}`;
+          const urlUidDoctor = `users/${oldData[key].uidPartner}`;
           const dataDetailDoctor = await get(child(db, urlUidDoctor));
+          // console.log(dataDetailDoctor.val());
           data.push({
             id: key,
             detailDoctor: dataDetailDoctor.val(),
@@ -71,11 +52,11 @@ const Messages = ({navigation}) => {
           const dataDoctor = {
             id: chat.detailDoctor.id,
             data: chat.detailDoctor,
-          }
+          };
           return (
             <List
               key={chat.id}
-              profile={{ uri:chat.detailDoctor.photo }}
+              profile={{uri: chat.detailDoctor.photo}}
               name={chat.detailDoctor.fullName}
               desc={chat.lastContentChat}
               onPress={() => navigation.navigate('Chatting', dataDoctor)}

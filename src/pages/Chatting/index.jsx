@@ -14,7 +14,7 @@ const Chatting = ({navigation, route}) => {
 
   useEffect(() => {
     getDataUserFromLocal();
-    const chatID = `${user.uid}_${dataDoctor.data.uid}`;
+    const chatID = `${dataDoctor.data.uid}_${user.uid}`;
 
     const urlFirebase = `chatting/${chatID}/allChat`;
     const dbRef = ref(db, urlFirebase);
@@ -62,7 +62,7 @@ const Chatting = ({navigation, route}) => {
       chatContent: chatContent,
     };
 
-    const chatID = `${user.uid}_${dataDoctor.data.uid}`;
+    const chatID = `${dataDoctor.data.uid}_${user.uid}`;
 
     const urlFirebase = `chatting/${chatID}/allChat/${setDateChat(today)}`;
     const urlMessagesUser = `messages/${user.uid}/${chatID}`;

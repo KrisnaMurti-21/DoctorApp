@@ -17,10 +17,55 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const Register = ({navigation}) => {
   const [form, setForm] = useForm({
     fullName: '',
-    profession: '',
+    category: 'dokter umum',
+    university: '',
+    str_number: '',
+    hospital_address: '',
+    gender: 'pria',
     email: '',
     password: '',
   });
+
+  const [itemCategory] = useState([
+    {
+      id: 1,
+      label: 'Dokter Umum',
+      value: 'dokter umum',
+    },
+    {
+      id: 2,
+      label: 'Psikiater',
+      value: 'psikiater',
+    },
+    {
+      id: 3,
+      label: 'Dokter Obat',
+      value: 'dokter obat',
+    },
+    {
+      id: 4,
+      label: 'Dokter Anak',
+      value: 'dokter anak',
+    },
+    {
+      id: 5,
+      label: 'Dokter Bedah',
+      value: 'dokter bedah',
+    },
+  ]);
+
+  const [itemGender] = useState([
+    {
+      id: 1,
+      label: 'Pria',
+      value: 'pria',
+    },
+    {
+      id: 2,
+      label: 'Wanita',
+      value: 'wanita',
+    },
+  ]);
 
   const [loading, setLoading] = useState(false);
 
@@ -36,11 +81,17 @@ const Register = ({navigation}) => {
         setForm('reset');
         const data = {
           fullName: form.fullName,
-          profession: form.profession,
+          profession: form.category,
+          category: form.category,
+          rate: 0,
+          university: form.university,
+          str_number: form.str_number,
+          hospital_address: form.hospital_address,
+          gender: form.gender,
           email: form.email,
           uid: success.user.uid,
         };
-        set(ref(db, 'users/' + success.user.uid + '/'), data);
+        set(ref(db, 'doctors/' + success.user.uid + '/'), data);
         storeData('user', data);
 
         navigation.navigate('UploadPhoto', data);
@@ -71,13 +122,41 @@ const Register = ({navigation}) => {
             />
             <Gap height={24} />
             <Input
-              label="Pekerjaan"
-              value={form.profession}
-              onChangeText={value => setForm('profession', value)}
+              label="Kategori"
+              value={form.category}
+              onValueChange={value => setForm('category', value)}
+              select
+              selectItem={itemCategory}
             />
             <Gap height={24} />
             <Input
-              label="Email Address"
+              label="Universitas"
+              value={form.university}
+              onChangeText={value => setForm('university', value)}
+            />
+            <Gap height={24} />
+            <Input
+              label="Nomor STR"
+              value={form.str_number}
+              onChangeText={value => setForm('str_number', value)}
+            />
+            <Gap height={24} />
+            <Input
+              label="Alamat Rumah Sakit"
+              value={form.hospital_address}
+              onChangeText={value => setForm('hospital_address', value)}
+            />
+            <Gap height={24} />
+            <Input
+              label="Jenis Kelamin"
+              value={form.gender}
+              onValueChange={value => setForm('gender', value)}
+              select
+              selectItem={itemGender}
+            />
+            <Gap height={24} />
+            <Input
+              label="Email"
               value={form.email}
               onChangeText={value => setForm('email', value)}
             />
@@ -90,6 +169,7 @@ const Register = ({navigation}) => {
             />
             <Gap height={40} />
             <Button title="Continue" onPress={onContinue} />
+            <Gap height={40} />
           </ScrollView>
         </View>
       </View>
@@ -105,8 +185,5 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     flex: 1,
   },
-  content: {
-    padding: 40,
-    paddingTop: 0,
-  },
+  content: {paddingHorizontal: 40, flex: 1},
 });

@@ -10,7 +10,7 @@ const GetStarted = ({navigation}) => {
       <View>
         <ILLogo />
         <Text style={styles.title}>
-          Konsultasi dengan dokter jadi lebih mudah & fleksibel
+        Layani Konsultasi Pasien jadi lebih mudah & fleksibel
         </Text>
       </View>
       <View>

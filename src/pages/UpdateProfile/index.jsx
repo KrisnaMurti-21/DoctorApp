@@ -23,6 +23,7 @@ const UpdateProfile = ({navigation}) => {
       const data = res;
       setPhoto({uri: res.photo});
       setProfile(data);
+      // console.log(profile);
     });
   }, []);
 
@@ -72,8 +73,11 @@ const UpdateProfile = ({navigation}) => {
     const db = getDatabase(Fire);
 
     const data = profile;
-    data.photo = photoForDB;
-    update(ref(db, `users/${profile.uid}`), data)
+    if (photoForDB===!null) {
+      data.photo = photoForDB;
+    }
+    // data.photo = photoForDB;
+    update(ref(db, `doctors/${profile.uid}`), data)
       .then(() => {
         console.log('data updated');
         storeData('user', data);

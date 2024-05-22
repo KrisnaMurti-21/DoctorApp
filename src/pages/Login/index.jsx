@@ -25,7 +25,7 @@ const Login = ({navigation}) => {
       .then(success => {
         dispatch({type: 'SET_LOADING', value: false});
         // contoh penggunaan child dimana child untuk membungkuskan ref db
-        get(child(ref(db), `users/${success.user.uid}/`))
+        get(child(ref(db), `doctors/${success.user.uid}/`))
           .then(snapshot => {
             if (snapshot.exists()) {
               storeData('user', snapshot.val());
